@@ -48,10 +48,18 @@ public class DatabaseConfiguration {
 		//일반적으로 하나의 애플리케이션에는 많은 수의 매퍼 파일이 존재하므로 패턴을 기반으로 한번에 등록하는 것이 좋음
 		sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:/mapper/**/sql-*.xml"));	
 		
+		sqlSessionFactoryBean.setConfiguration(mybatisConfig());
+		
 		return sqlSessionFactoryBean.getObject();
 	}
 	
 	public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
 		return new SqlSessionTemplate(sqlSessionFactory);
+	}
+	
+	@Bean
+	@ConfigurationProperties(prefix="mybatis.configuration")	//application.properties의 설정 중 마이바티스에 관련된 설정 가져오기
+	public org.apache.ibatis.session.Configuration mybatisConfig(){
+		return new org.apache.ibatis.session.Configuration();	//가져온 마이바티스 설정을 자바 클래스로 만들어서 반환
 	}
 }
