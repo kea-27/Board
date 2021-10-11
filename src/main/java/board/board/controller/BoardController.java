@@ -23,6 +23,17 @@ public class BoardController {
 		List<BoardDto> list = boardService.selectBoardList();
 		mv.addObject("list",list);
 		
-		return mv;
+		return mv;	//게시글 목록화면 호출
+	}
+	
+	@RequestMapping("/board/openBoardWrite.do")
+	public String openBoardWrite() throws Exception{
+		return "/board/boardWrite";
+	}
+	
+	@RequestMapping("/board/insertBoard.do")
+	public String insertBoard(BoardDto board) throws Exception{
+		boardService.insertBoard(board);
+		return "redirect:/board/openBoardList.do";	//게시글 목록 조회 주소 호출
 	}
 }
