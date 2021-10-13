@@ -38,8 +38,14 @@ public class BoardController {
 		return "redirect:/board/openBoardList.do";	//게시글 목록 조회 주소 호출
 	}
 	
-	@RequestMapping("/board/openBoardDetail")
+	@RequestMapping("/board/openBoardDetail.do")
 	public ModelAndView openBoardDetail(@RequestParam int boardIdx) throws Exception {
+		ModelAndView mv = new ModelAndView("/board/boardDetail");
+		
+		BoardDto board = boardService.selectBoardDetail(boardIdx);
+		mv.addObject("board", board);
+		
+		return mv;
 		
 	}
 }
