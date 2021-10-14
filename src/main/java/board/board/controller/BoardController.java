@@ -52,7 +52,7 @@ public class BoardController {
 	@RequestMapping("/board/updateBoard.do")
 	public String updateBoard(BoardDto board) throws Exception  {
 		
-		boardService.updateBoard(board);
+		boardService.updateBoard(board);	//updateBoard에 BoardDto 객체 전달
 		return "redirect:/board/openBoardList.do";
 	}
 	
