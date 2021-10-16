@@ -30,6 +30,19 @@
 		warn : 프로그램의 실행에는 문제가 없지만 추후 시스템 에러의 원인이 될 수 있다는 경고성 메시지를 의미함
 		error : 요청을 처리하던 중 문제가 발생한 것을 의미함
 	 -->
+	 
+	<logger name="jdbc.sqlonly" level="INFO" appender-ref="console-infolog"></logger>
+	<logger name="jdbc.resultsettable" level="INFO" appender-ref="console-infolog"></logger>
+	
+	<!-- log4jdbc에서 제공하는 로거 -->
+	<!-- 
+		jdbc.sqlonly : SQL을 보여줌, Prepared statement의 경우 관련된 파라미터는 자동으로 변경되어 출력됨
+		jdbc.sqltiming : SQL문과 해당 SQL문의 실행 시간을 밀리초 단위로 보여줌
+		jdbc.audit : ResultSets를 제외한 모든 JDBC 호출 정보를 보여줌, 매우 많은 로그가 발생되기 때문에 JDBC 관련 문제를 추적하기 위한 것이 아니라면 일반적으로 사용하지 ㅇ낳음
+		jdbc.resultset : ResultSets를 포함한 JDBC 호출 정보를 보여 주기 때문에 jdbc.audit보다 더 많은 로그가 생성됨
+		jdbc.resulttable : SQL의 조회 결과를 테이블로 보여줌
+		jdbc.connection : Connection의 연결과 종료에 관련된 로그를 보여줌, Connection 누수 문제를 해결하는데 도움이 됨
+	 -->
 	
 	<!-- 루트 로거 -->
 	<root level="off">
