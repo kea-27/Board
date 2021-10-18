@@ -34,6 +34,7 @@ public class BoardController {
 	@RequestMapping("/board/openBoardWrite.do")
 	public String openBoardWrite() throws Exception{
 		log.debug("selectBoard");
+		
 		return "/board/boardWrite";
 	}
 	
