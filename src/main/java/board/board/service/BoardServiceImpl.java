@@ -1,9 +1,15 @@
 package board.board.service;
 
+import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import board.board.dto.BoardDto;
 import board.board.mapper.BoardMapper;
@@ -14,6 +20,8 @@ public class BoardServiceImpl implements BoardService{
 	@Autowired
 	private BoardMapper boardMapper;	//데이터베이스에 접근하는 DAO 빈 선언
 	
+	private Logger log = LoggerFactory.getLogger(this.getClass());
+	
 	@Override
 	public List<BoardDto> selectBoardList() throws Exception {
 		
@@ -22,8 +30,28 @@ public class BoardServiceImpl implements BoardService{
 
 	
 	@Override
-	public void insertBoard(BoardDto board) throws Exception {
-		boardMapper.insertBoard(board);
+	public void insertBoard(BoardDto board, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
+//		boardMapper.insertBoard(board);
+		
+		if(ObjectUtils.isEmpty(multipartHttpServletRequest) == false) {
+			Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
+			String name;
+			
+			while(iterator.hasNext()) {
+				name = iterator.next();
+				log.debug("file tag name : " + name);
+				
+				List<MultipartFile> list = multipartHttpServletRequest.getFiles(name);
+				
+				for(MultipartFile multipartFile : list) {
+					log.debug("start file information");
+					log.debug("file name : " + multipartFile.getOriginalFilename());
+					log.debug("file size : " + multipartFile.getSize());
+					log.debug("file content type : " + multipartFile.getContentType());
+					log.debug("end file information.\n");
+				}
+			}
+		}
 	}
 
 
