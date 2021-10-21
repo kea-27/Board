@@ -18,7 +18,7 @@
 	</select>
 	
 	<!-- #{변수}를 사용하면 DTO의 getter메서드로 해당하는 변수값을 가져온다. -->
-	<insert id="insertBoard" parameterType="board.board.dto.BoardDto">	
+	<insert id="insertBoard" parameterType="board.board.dto.BoardDto" useGeneratedKeys="true" keyProperty="boardIdx">	
 		<![CDATA[
 			INSERT INTO t_board
 			(
@@ -86,4 +86,29 @@
 				board_idx = #{boardIdx}
 		]]>
 	</update>
+	
+	<insert id="insertBoardFileList" parameterType="board.board.dto.BoardFileDto">
+		<![CDATA[
+			INSERT INTO t_file
+			(
+				board_idx,
+				original_file_name,
+				stored_file_path,
+				file_size,
+				creator_id,
+				created_datetime
+			)
+			VALUES
+		]]>
+		<foreach collection="list" item="item" separator=",">
+			(
+				#{item.boardIdx},
+				#{item.originalFileName},
+				#{item.storedFilePath},
+				#{item.fileSize},
+				'admin',
+				NOW()
+			)
+		</foreach>
+	</insert>
 </mapper>
