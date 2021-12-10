@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>게시글 상세 화면</title>
+		<link rel="stylesheet" th:href="@{/css/style.css}"/>
+	</head>
+	<body>
+		<div class="container">
+			<h2>게시글 상세 화면</h2>
+		    <form id="frm" method="post">
+		    	<table class="board_detail">
+					<colgroup>
+						<col width="15%"/>
+						<col width="35%"/>
+						<col width="15%"/>
+						<col width="35%"/>
+					</colgroup>
+					<caption>게시글 상세내용</caption>
+					<tbody>
+						<tr>
+							<th scope="row">글 번호</th>
+							<td th:text="${board.boardIdx }"></td>
+							<th scope="row">조회수</th>
+							<td th:text="${board.hitCnt }"></td>
+						</tr>
+						<tr>
+							<th scope="row">작성자</th>
+							<td th:text="${board.creatorId }"></td>
+							<th scope="row">작성일</th>
+							<td th:text="${board.createdDatetime }"></td>
+						</tr>
+						<tr>
+							<th scope="row">제목</th>
+							<td colspan="3"><input type="text" id="title" name="title" th:value="${board.title }"/></td>
+						</tr>
+						<tr>
+							<td colspan="4" class="view_text">
+								<textarea title="내용" id="contents" name="contents" th:text="${board.contents }"></textarea>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<input type="hidden" id="boardIdx" name="boardIdx" th:value="${board.boardIdx }">
+				<input type="hidden" id="method" name="_method"/>
+				<!-- 
+					HTML은 POST와 GET 방식의 요청만 지원, PUT, DELETE 방식은 지원하지 않음 
+					스프링은 POST, GET 방식을 이용해서 PUT과 DELETE 방식을 사용할 수 있는 기능을 지원 : HiddenHttpMethodFilter (스프링 부트 2.1.x에는 필터가 등록되어있어 별도로 설정을 추가하지 않아도 됨)
+					HiddenHttpMethodFilter : _method라는 이름의 파라미터가 존재할 경우 그 값을 요청 방식으로 사용함
+					-> _method값을 PUT으로 보내면 컨트롤러에서 RequestMethod.PUT의 값을 가진 URI가 호출됨
+				-->
+			</form>
+			
+			<div class="file_list">
+				<a th:each="list : ${board.fileList}" th:href="@{/board/file(idx=${list.idx}, boardIdx=${list.boardIdx})}" th:text="|${list.originalFileName} (${list.fileSize} kb)|"></a>
+				<!-- th:href="@{/board/file(idx=${list.idx}, boardIdx=${list.boardIdx})}" 
+					 - 파일을 다운받는 URI : /board/file
+					 - 파일을 조회하기 위해서 파일번호 (idx), 게시글 번호 (boardIdx)가 필요함
+					 Thymeleaf에 여러 개의 파라미터를 전달하려면 (키 = 값, 키 = 값) 형식으로 데이터를 전달해야 함
+				-->
+			</div>
+			
+			<a href="#this" id="list" class="btn">목록으로</a>
+			<a href="#this" id="edit" class="btn">수정하기</a>
+			<a href="#this" id="delete" class="btn">삭제하기</a>
+		</div>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				
+				var boardIdx = $("#boardIdx").val();
+				
+				$("#list").on("click", function(){
+					
+					location.href = "/board/";
+				});
+				
+				$("#edit").on("click", function(){
+					
+					$("#method").val("put");
+					
+					var frm = $("#frm")[0];
+					frm.action = "/board/"+boardIdx;
+					frm.submit();
+				});
+				
+				$("#delete").on("click", function(){
+					
+					$("#method").val("delete");
+					
+					var frm = $("#frm")[0];
+					frm.action = "/board/"+boardIdx;
+					frm.submit();
+				});
+			});
+		</script>
+	</body>
+</html>
